@@ -1,3 +1,33 @@
+html {
+  background: url(../img/sunny.jpg) no-repeat center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
 body {
-  background-color: red;
+  background-color: transparent;
+}
+
+h1 {
+  font-size: 3em;
+}
+
+.horizontal-flex {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+}
+
+.right-padded {
+  padding-right: 1em;
+}
+
+#header {
+  justify-content: flex-end;
+  text-align: right;
+  background-color: transparent;
+  color: white;
+  font-family: 'Baloo', cursive;
 }
