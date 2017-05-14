@@ -1,5 +1,6 @@
 $(document).ready(function() {
   updateTime();
+  console.log("JS is working");
 });
 
 function updateTime() {
