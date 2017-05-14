@@ -23,11 +23,11 @@ h1 {
 
 .right-padded {
   padding-right: 1em;
+  text-align: right;
 }
 
 #header {
   justify-content: flex-end;
-  text-align: right;
   background-color: transparent;
   color: white;
   font-family: 'Baloo', cursive;
