@@ -3,5 +3,5 @@ $(document).ready(function {
 });
 
 function updateTime() {
-  $("time").html("6:30 PM");
+  $("#time").html("6:30 PM");
 }
