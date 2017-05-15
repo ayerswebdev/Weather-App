@@ -58,16 +58,22 @@ function updateLocationWeather() {
 
           //the "administrative_area_level_1" type is used to hold the state's name; collect the postal abbreviation from here
           for(var l = 0; l < json.results[0].address_components[i].types.length; l++) {
-            if(json.results[0].address_components[i].types[l] == "administrative_area_level_1") {
+            if(json.results[0].address_components[i].types[l] === "administrative_area_level_1") {
               state = json.results[0].address_components[i].short_name;
+            }
+          }
+
+          for(var m = 0; m < json.results[0].address_components[i].types.length; m++) {
+            if(json.results[0].address_components[i].types[m] === "country") {
+              country = json.results[0].address_components[i].short_name;
             }
           }
         }
 
-        //update the displayed location
-        var formattedCS = city + ", " + state;
-        console.log(formattedCS);
-        $("#loc").html(formattedCS);
+        //update the displayed location. If not in US display city and country; if in US display city and state
+        var formattedCSC = (country !== "US") ? city + ", " + country : city + ", " + state;
+        console.log(formattedCSC);
+        $("#loc").html(formattedCSC);
       });
     });
   }
