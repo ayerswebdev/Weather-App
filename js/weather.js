@@ -72,7 +72,7 @@ function updateLocationWeather() {
 
         //update the displayed location. If not in US display city and country; if in US display city and state
         var formattedCSC = (country !== "US") ? city + ", " + country : city + ", " + state;
-        console.log(formattedCSC);
+        console.log(city + ", " + state + ", " + country);
         $("#loc").html(formattedCSC);
       });
     });
