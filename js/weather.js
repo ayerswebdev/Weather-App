@@ -23,7 +23,9 @@ function updateDate() {
   var month = now.getMonth() + 1;
   var date = now.getDate();
   var year = now.getFullYear();
-  $("#date").html(month + "/" + date + "/" + year);
+  var formattedDate = month + "/" + date + "/" + year;
+  console.log(formattedDate);
+  $("#date").html(formattedDate);
 }
 
 function updateLocationWeather() {
@@ -31,9 +33,10 @@ function updateLocationWeather() {
     navigator.geolocation.getCurrentPosition(function(pos) {
       var lat = pos.coords.latitude;
       var lon = pos.coords.longitude;
-
+      console.log("Latitude: " + lat + "; " + "Longitude: " + lon);
       //use Google Maps Geolocation API to convert latitude and longitude to a city and state, then display on screen
       $.getJSON("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + lat + "," + lon + "&key=AIzaSyD2tL_cbRms_PUZl1qXPZjAucNmyCNKWa4", function(json) {
+        console.log(json);
         var city = "", state = "", country = "";
 
         //rural areas use the "locality" type to hold the city name; search the JSON for this and update city variable if found
@@ -62,7 +65,9 @@ function updateLocationWeather() {
         }
 
         //update the displayed location
-        $("#loc").html(city + ", " + state);
+        var formattedCS = city + ", " + state;
+        console.log(formattedCS);
+        $("#loc").html(formattedCS);
       });
     });
   }
