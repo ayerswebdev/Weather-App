@@ -83,7 +83,7 @@ function updateLocationWeather() {
       //collect weather data
       $.getJSON("https://cors-anywhere.herokuapp.com/http://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + lon + "&units=Imperial" + appID,function(json) {
         //console.log(json);
-
+        console.log(json);
         var temp = json.main.temp;
         temp = temp.toFixed(0); //don't need to be too precise on temp
 
