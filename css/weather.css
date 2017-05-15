@@ -8,6 +8,7 @@ html {
 
 body {
   background-color: transparent;
+  font-family: 'Baloo', cursive;
 }
 
 h1 {
@@ -20,14 +21,28 @@ h1 {
   align-items: center;
 }
 
+.vertical-flex {
+  display: flex;
+  flex-flow: column wrap;
+  align-items: center;
+  justify-content: center;
+}
+
 .right-padded {
   padding-right: 1em;
   text-align: right;
+}
+
+.weather-box {
+  width: 50%;
+  height: 30em;
+  position: fixed;
+  top: 55%;
+  left: 35%;
 }
 
 #header {
   justify-content: flex-end;
   background-color: transparent;
   color: white;
-  font-family: 'Baloo', cursive;
 }
