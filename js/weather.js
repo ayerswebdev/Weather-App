@@ -6,6 +6,7 @@ $(document).ready(function() {
   var intervalDate = setInterval(updateDate, 60000);
 });
 
+//use Date object to get the current time and display it on screen
 function updateTime() {
   var now = new Date();
   var hours = now.getHours();
@@ -16,6 +17,7 @@ function updateTime() {
   $("#time").html(hours + ":" + minutes + " " + suffix);
 }
 
+//use Date object to get the current date and display it on screen
 function updateDate() {
   var now = new Date();
   var month = now.getMonth() + 1;
@@ -26,21 +28,42 @@ function updateDate() {
 
 function updateLocationWeather() {
   if(navigator.geolocation) {
-    var location = getLocation();
-    var lat = location[0];
-    var lon = location[1];
+    navigator.geolocation.getCurrentPosition(function(pos) {
+      var lat = pos.coords.latitude;
+      var lon = pos.coords.longitude;
 
-    $.getJSON("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + lat + "," + lon + "&key=AIzaSyD2tL_cbRms_PUZl1qXPZjAucNmyCNKWa4", function(json) {
-      console.log(json);
-    });
-  }
+      //use Google Maps Geolocation API to convert latitude and longitude to a city and state, then display on screen
+      $.getJSON("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + lat + "," + lon + "&key=AIzaSyD2tL_cbRms_PUZl1qXPZjAucNmyCNKWa4", function(json) {
+        var city = "", state = "", country = "";
 
-  function getLocation() {
-    navigator.geolocation.getCurrentPosition(function(position) {
-      var lat = position.coords.latitude;
-      var lon = position.coords.longitude;
-      var location = [lat, lon];
-      return location;
+        //rural areas use the "locality" type to hold the city name; search the JSON for this and update city variable if found
+        for(var i = 0; i < json.results[0].address_components.length; i++) {
+          for(var j = 0; j < json.results[0].address_components[i].types.length; j++) {
+            if(json.results[0].address_components[i].types[j] === "locality") {
+              city = json.results[0].address_components[i].short_name;
+            }
+          }
+
+          //urban areas use the "sublocality" type to hold the city name; if no city was found before, find it here and update city variable
+          if(city === "") {
+            for(var k = 0; k < json.results[0].address_components[i].types.length; k++) {
+              if(json.results[0].address_components[i].types[k] === "sublocality") {
+                city = json.results[0].address_components[i].short_name;
+              }
+            }
+          }
+
+          //the "administrative_area_level_1" type is used to hold the state's name; collect the postal abbreviation from here
+          for(var l = 0; l < json.results[0].address_components[i].types.length; l++) {
+            if(json.results[0].address_components[i].types[l] == "administrative_area_level_1") {
+              state = json.results[0].address_components[i].short_name;
+            }
+          }
+        }
+
+        //update the displayed location
+        $("#loc").html(city + ", " + state);
+      });
     });
   }
 }

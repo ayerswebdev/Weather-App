@@ -9,6 +9,7 @@ html {
 body {
   background-color: transparent;
   font-family: 'Baloo', cursive;
+  color: white;
 }
 
 h1 {
@@ -44,5 +45,4 @@ h1 {
 #header {
   justify-content: flex-end;
   background-color: transparent;
-  color: white;
 }
