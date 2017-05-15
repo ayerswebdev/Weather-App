@@ -2,8 +2,9 @@ $(document).ready(function() {
   updateTime();
   updateDate();
   updateLocationWeather();
-  var intervalTime = setInterval(updateTime, 1000);
-  var intervalDate = setInterval(updateDate, 60000);
+  var intervalTime = setInterval(updateTime, 1000); //update time every second
+  var intervalDate = setInterval(updateDate, 60000); //update date every minute
+  var intervalLocationWeather = setInterval(updateLocationWeather, 900000); //update location/weather every fifteen minutes
 });
 
 //use Date object to get the current time and display it on screen
@@ -34,6 +35,7 @@ function updateLocationWeather() {
       var lat = pos.coords.latitude;
       var lon = pos.coords.longitude;
       console.log("Latitude: " + lat + "; " + "Longitude: " + lon);
+
       //use Google Maps Geolocation API to convert latitude and longitude to a city and state, then display on screen
       $.getJSON("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + lat + "," + lon + "&key=AIzaSyD2tL_cbRms_PUZl1qXPZjAucNmyCNKWa4", function(json) {
         console.log(json);
@@ -74,6 +76,29 @@ function updateLocationWeather() {
         var formattedCSC = (country !== "US") ? city + ", " + country : city + ", " + state;
         console.log(city + ", " + state + ", " + country);
         $("#loc").html(formattedCSC);
+      });
+
+      var appID = "&appid=296c68960963db7daf6943cd88b7d6f0";
+
+      //collect weather data
+      $.getJSON("https://cors-anywhere.herokuapp.com/http://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + lon + "&units=Imperial" + appID,function(json) {
+        //console.log(json);
+
+        var temp = json.main.temp;
+        temp = temp.toFixed(0); //don't need to be too precise on temp
+
+        //temperature of -0 wouldn't make sense to the user
+        if(temp == -0) {
+          temp = 0;
+        }
+
+        var conditions = json.weather[0].main;
+        var iconID = json.weather[0].icon;
+
+        //log and display temperature and conditions information
+        console.log(temp + String.fromCharCode(176) + " F, " + conditions + ", " + iconID);
+        $("#temp").html(temp + String.fromCharCode(176) + " F");
+        $("#conditions").html(conditions);
       });
     });
   }
