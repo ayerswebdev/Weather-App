@@ -1,14 +1,10 @@
 $(document).ready(function() {
   updateTime();
   updateDate();
-  updateLocationWeather(function(coords) {
-    console.log(coords);
-    updateLocation(coords.lat, coords.lon);
-    updateWeather(coords.lat, coords.lon);
-  });
+  updateData();
   var intervalTime = setInterval(updateTime, 1000); //update time every second
   var intervalDate = setInterval(updateDate, 60000); //update date every minute
-  //var intervalLocationWeather = setInterval(updateLocationWeather, 900000); //update location/weather every fifteen minutes
+  var intervalData = setInterval(updateData, 900000); //update location/weather every fifteen minutes
 });
 
 //use Date object to get the current time and display it on screen
@@ -103,12 +99,136 @@ function updateWeather(lat, lon) {
       temp = 0;
     }
 
-    var conditions = json.weather[0].main;
-    var weatherID = json.weather[0].id;
+    var weatherInfo = {
+      icon: json.weather[0].icon,
+      code: json.weather[0].id
+    };
 
     //log and display temperature and conditions information
-    console.log(temp + String.fromCharCode(176) + " F, " + conditions + ", " + weatherID);
+    console.log(temp + String.fromCharCode(176) + " F");
+    console.log(weatherInfo);
     $("#temp").html(temp + String.fromCharCode(176) + " F");
-    $("#conditions").html(conditions);
+    $("#conditions").html("Work in progress");
+
+    setBackground(weatherInfo);
   });
+}
+
+function updateData() {
+  updateLocationWeather(function(coords) {
+    console.log(coords);
+    updateLocation(coords.lat, coords.lon);
+    updateWeather(coords.lat, coords.lon);
+  });
+}
+
+//set background image based on weather info
+function setBackground(info) {
+  //this switch will handle most weather conditions
+  switch(info.icon) {
+    //case for clear day
+    case "01d":
+      $("html").css("background", "url(./img/sunny.jpg) no-repeat center fixed");
+      break;
+
+    //case for clear night
+    case "01n":
+      $("html").css("background", "url(./img/clear-night.jpg) no-repeat center fixed");
+      break;
+
+    //case for partly cloudy day
+    case "02d":
+      $("html").css("background", "url(./img/partly-cloudy.jpg) no-repeat center fixed");
+      break;
+
+    //case for partly cloudy night
+    case "02n":
+      $("html").css("background", "url(./img/partly-cloudy-night.jpg) no-repeat center fixed");
+      break;
+
+    //case for cloudy/overcast
+    case "03d":
+    case "03n":
+    case "04d":
+    case "04n":
+      $("html").css("background", "url(./img/cloudy.jpg) no-repeat center fixed");
+      break;
+
+    //case for rainy
+    case "09d":
+    case "09n":
+    case "10d":
+    case "10n":
+      $("html").css("background", "url(./img/rain.jpg) no-repeat center fixed");
+      break;
+
+    //case for thunderstorms
+    case "11d":
+    case "11n":
+      $("html").css("background", "url(./img/tstorm.jpg) no-repeat center fixed");
+      break;
+
+    //case for snowy
+    case "13d":
+    case "13n":
+      $("html").css("background", "url(./img/snow.jpg) no-repeat center fixed");
+      break;
+  }
+  //the icon ID 50d is used for many different weather types; this switch specifically handles that icon ID
+  switch (info.code) {
+    case 900:
+    case 781:
+      $("html").css("background", "url(./img/tornado.jpg) no-repeat center fixed");
+      break;
+
+    case 901:
+    case 902:
+    case 962:
+    case 961:
+    case 960:
+    case 959:
+    case 958:
+    case 957:
+    case 905:
+    case 771:
+      $("html").css("background", "url(./img/hurricane.jpg) no-repeat center fixed");
+      break;
+
+    case 903:
+      $("html").css("background", "url(./img/snow.jpg) no-repeat center fixed");
+      break;
+
+    case 904:
+      $("html").css("background", "url(./img/heat.jpg) no-repeat center fixed");
+      break;
+
+    case 906:
+      $("html").css("background", "url(./img/hail.jpg) no-repeat center fixed");
+      break;
+
+    case 762:
+      $("html").css("background", "url(./img/volcanic-ash.jpg) no-repeat center fixed");
+      break;
+
+    case 731:
+    case 751:
+      $("html").css("background", "url(./img/sandstorm.jpg) no-repeat center fixed");
+      break;
+
+    case 701:
+    case 711:
+    case 721:
+    case 741:
+      $("html").css("background", "url(./img/fog.jpg) no-repeat center fixed");
+      break;
+
+    case 951:
+    case 952:
+    case 953:
+    case 954:
+    case 955:
+    case 956:
+      $("html").css("background", "url(./img/breeze.jpg) no-repeat center fixed");
+      break;
+  }
 }
