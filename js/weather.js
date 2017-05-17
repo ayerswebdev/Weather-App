@@ -101,14 +101,15 @@ function updateWeather(lat, lon) {
 
     var weatherInfo = {
       icon: json.weather[0].icon,
-      code: json.weather[0].id
+      code: json.weather[0].id,
+      description: json.weather[0].description
     };
 
     //log and display temperature and conditions information
     console.log(temp + String.fromCharCode(176) + " F");
     console.log(weatherInfo);
     $("#temp").html(temp + String.fromCharCode(176) + " F");
-    $("#conditions").html("Work in progress");
+    $("#conditions").html(formatConditions(weatherInfo.description));
 
     setBackground(weatherInfo);
   });
@@ -231,4 +232,10 @@ function setBackground(info) {
       $("html").css("background", "url(./img/breeze.jpg) no-repeat center fixed");
       break;
   }
+}
+
+function formatConditions(str) {
+  return str.split(' ').map(function(val) {
+    return val.charAt(0).toUpperCase() + val.substr(1).toLowerCase();
+  }).join(' ');
 }
