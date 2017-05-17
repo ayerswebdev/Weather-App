@@ -40,7 +40,7 @@ function updateLocationWeather(callback) {
   });
 }
 
-function updateLocation(lat, lon) {
+function geocode(lat, lon) {
   //use Google Maps Geolocation API to convert latitude and longitude to a city and state, then display on screen
   $.getJSON("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + lat + "," + lon + "&key=AIzaSyD2tL_cbRms_PUZl1qXPZjAucNmyCNKWa4", function(json) {
     console.log(json);
@@ -109,7 +109,7 @@ function updateWeather(lat, lon) {
     console.log(temp + String.fromCharCode(176) + " F");
     console.log(weatherInfo);
     $("#temp").html(temp + String.fromCharCode(176) + " F");
-    $("#conditions").html(formatConditions(weatherInfo.description));
+    $("#conditions").html(titleCase(weatherInfo.description));
 
     setBackground(weatherInfo);
   });
@@ -118,33 +118,35 @@ function updateWeather(lat, lon) {
 function updateData() {
   updateLocationWeather(function(coords) {
     console.log(coords);
-    updateLocation(coords.lat, coords.lon);
+    geocode(coords.lat, coords.lon);
     updateWeather(coords.lat, coords.lon);
   });
 }
 
 //set background image based on weather info
 function setBackground(info) {
-  //this switch will handle most weather conditions
+  var imgName;
+
+  //this switch will handle most common weather conditions
   switch(info.icon) {
     //case for clear day
     case "01d":
-      $("html").css("background", "url(./img/sunny.jpg) no-repeat center fixed");
+      imgName = "sunny";
       break;
 
     //case for clear night
     case "01n":
-      $("html").css("background", "url(./img/clear-night.jpg) no-repeat center fixed");
+      imgName = "clear-night";
       break;
 
     //case for partly cloudy day
     case "02d":
-      $("html").css("background", "url(./img/partly-cloudy.jpg) no-repeat center fixed");
+      imgName = "partly-cloudy";
       break;
 
     //case for partly cloudy night
     case "02n":
-      $("html").css("background", "url(./img/partly-cloudy-night.jpg) no-repeat center fixed");
+      imgName = "partly-cloudy-night";
       break;
 
     //case for cloudy/overcast
@@ -152,7 +154,7 @@ function setBackground(info) {
     case "03n":
     case "04d":
     case "04n":
-      $("html").css("background", "url(./img/cloudy.jpg) no-repeat center fixed");
+      imgName = "cloudy";
       break;
 
     //case for rainy
@@ -160,81 +162,100 @@ function setBackground(info) {
     case "09n":
     case "10d":
     case "10n":
-      $("html").css("background", "url(./img/rain.jpg) no-repeat center fixed");
+      imgName = "rain";
       break;
 
     //case for thunderstorms
     case "11d":
     case "11n":
-      $("html").css("background", "url(./img/tstorm.jpg) no-repeat center fixed");
+      imgName = "tstorm";
       break;
 
     //case for snowy
     case "13d":
     case "13n":
-      $("html").css("background", "url(./img/snow.jpg) no-repeat center fixed");
+      imgName = "snow";
       break;
   }
   //the icon ID 50d is used for many different weather types; this switch specifically handles that icon ID
-  switch (info.code) {
-    case 900:
-    case 781:
-      $("html").css("background", "url(./img/tornado.jpg) no-repeat center fixed");
-      break;
+  if(!imgName) {
+    switch (info.code) {
+      case 900:
+      case 781:
+        imgName = "tornado";
+        break;
 
-    case 901:
-    case 902:
-    case 962:
-    case 961:
-    case 960:
-    case 959:
-    case 958:
-    case 957:
-    case 905:
-    case 771:
-      $("html").css("background", "url(./img/hurricane.jpg) no-repeat center fixed");
-      break;
+      //case for tropical storms/hurricanes/etc
+      case 901:
+      case 902:
+      case 962:
+      case 961:
+      case 960:
+      case 959:
+      case 958:
+      case 957:
+      case 905:
+      case 771:
+        imgName = "hurricane";
+        break;
 
-    case 903:
-      $("html").css("background", "url(./img/snow.jpg) no-repeat center fixed");
-      break;
+      //case for extreme cold
+      case 903:
+        imgName = "snow";
+        break;
 
-    case 904:
-      $("html").css("background", "url(./img/heat.jpg) no-repeat center fixed");
-      break;
+      //case for extreme heat
+      case 904:
+        imgName = "heat";
+        break;
 
-    case 906:
-      $("html").css("background", "url(./img/hail.jpg) no-repeat center fixed");
-      break;
+      //case for hail
+      case 906:
+        imgName = "hail";
+        break;
 
-    case 762:
-      $("html").css("background", "url(./img/volcanic-ash.jpg) no-repeat center fixed");
-      break;
+      //case for volcanic ash
+      case 762:
+        imgName = "volcanic-ash";
+        break;
 
-    case 731:
-    case 751:
-      $("html").css("background", "url(./img/sandstorm.jpg) no-repeat center fixed");
-      break;
+      //case for sandstorm
+      case 731:
+      case 751:
+        imgName = "sandstorm";
+        break;
 
-    case 701:
-    case 711:
-    case 721:
-    case 741:
-      $("html").css("background", "url(./img/fog.jpg) no-repeat center fixed");
-      break;
+      //case for fog
+      case 701:
+      case 711:
+      case 721:
+      case 741:
+        imgName = "fog";
+        break;
 
-    case 951:
-    case 952:
-    case 953:
-    case 954:
-    case 955:
-    case 956:
-      $("html").css("background", "url(./img/breeze.jpg) no-repeat center fixed");
-      break;
+      //case for "breezy" weather
+      case 951:
+      case 952:
+      case 953:
+      case 954:
+      case 955:
+      case 956:
+        imgName = "breeze";
+        break;
+    }
   }
+
+  //update the background image
+  $("html").css({
+    "background": "url(./img/" + imgName + ".jpg) no-repeat center fixed",
+    "-webkit-background-size": "cover",
+    "-moz-background-size": "cover",
+    "-o-background-size": "cover",
+    "background-size": "cover"
+  });
 }
 
-function formatConditions(str) {
+function titleCase(str) {
   return str.split(' ').map(function(val) {
     return val.charAt(0).toUpperCase() + val.substr(1).toLowerCase();
   }).join(' ');
