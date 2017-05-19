@@ -42,6 +42,13 @@ button:focus, button:active {
   justify-content: center;
 }
 
+.loading {
+  width: 100%;
+  height: 100vh;
+  z-index: 10;
+  background-color: white;
+}
+
 .right-padded {
   padding-right: 1em;
   text-align: right;
@@ -64,4 +71,9 @@ button:focus, button:active {
 
 #header {
   justify-content: flex-end;
+}
+
+#loading-img {
+  margin: auto;
+  width: 30%;
 }

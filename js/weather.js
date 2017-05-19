@@ -1,4 +1,5 @@
 $(document).ready(function() {
+  $(".content").hide();
   updateTime();
   updateDate();
   updateData();
@@ -126,6 +127,10 @@ function updateData() {
     console.log(coords);
     geocode(coords.lat, coords.lon);
     updateWeather(coords.lat, coords.lon);
+
+    //once all calls completed, update the page
+    $(".loading").hide();
+    $(".content").show();
   });
 }
 
