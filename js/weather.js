@@ -129,8 +129,10 @@ function updateData() {
     updateWeather(coords.lat, coords.lon);
 
     //once all calls completed, update the page
-    $(".loading").hide();
-    $(".content").show();
+    setTimeout(function() {
+      $(".loading").hide();
+      $(".content").show();
+    }, 100);
   });
 }
 
