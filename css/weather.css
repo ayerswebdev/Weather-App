@@ -13,11 +13,11 @@ body {
 }
 
 h1 {
-  font-size: 5em;
+  font-size: 2.5em;
 }
 
 h2 {
-  font-size: 3em;
+  font-size: 1.5em;
 }
 
 button {
@@ -50,13 +50,13 @@ button:focus, button:active {
 }
 
 .right-padded {
-  padding-right: 1em;
+  padding-right: 0.5%;
   text-align: right;
 }
 
 .low-opac {
   background: rgba(51, 51, 51, 0.05);
-  padding: 0 2em;
+  padding: 0 1%;
   border-radius: 5px;
 }
 
@@ -75,4 +75,14 @@ button:focus, button:active {
 #loading-img {
   margin: auto;
   width: 30%;
+}
+
+@media all and (min-width: 50em) {
+  h1 {
+    font-size: 5em;
+  }
+
+  h2 {
+    font-size: 3em;
+  }
 }
