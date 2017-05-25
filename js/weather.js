@@ -268,7 +268,7 @@ function setBackgroundImage(src) {
     src += "-p";
   }
 
-  src = "url(./img/" + src + ".jpg) no-repeat center fixed";
+  src = "#d3d3d3 url(./img/" + src + ".jpg) no-repeat center fixed";
   //console.log(src);
 
   //update the background image
