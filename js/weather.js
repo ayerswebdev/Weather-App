@@ -117,7 +117,7 @@ function updateWeather(lat, lon) {
     $("#conditions").html(titleCase(weatherInfo.description));
 
     //set the background according to the given weather information
-    setBackground(weatherInfo);
+    determineShownImage(weatherInfo);
   });
 }
 
@@ -137,29 +137,29 @@ function updateData() {
 }
 
 //set background image based on weather info
-function setBackground(info) {
-  var imgName;
+function determineShownImage(info) {
+  var correctImg;
 
   //this switch will handle most common weather conditions
   switch(info.icon) {
     //case for clear day
     case "01d":
-      imgName = "sunny";
+      correctImg = "sunny";
       break;
 
     //case for clear night
     case "01n":
-      imgName = "clear-night";
+      correctImg = "clear-night";
       break;
 
     //case for partly cloudy day
     case "02d":
-      imgName = "partly-cloudy";
+      correctImg = "partly-cloudy";
       break;
 
     //case for partly cloudy night
     case "02n":
-      imgName = "partly-cloudy-night";
+      correctImg = "partly-cloudy-night";
       break;
 
     //case for cloudy/overcast
@@ -167,7 +167,7 @@ function setBackground(info) {
     case "03n":
     case "04d":
     case "04n":
-      imgName = "cloudy";
+      correctImg = "cloudy";
       break;
 
     //case for rainy
@@ -175,27 +175,27 @@ function setBackground(info) {
     case "09n":
     case "10d":
     case "10n":
-      imgName = "rain";
+      correctImg = "rain";
       break;
 
     //case for thunderstorms
     case "11d":
     case "11n":
-      imgName = "tstorm";
+      correctImg = "tstorm";
       break;
 
     //case for snowy
     case "13d":
     case "13n":
-      imgName = "snow";
+      correctImg = "snow";
       break;
   }
   //the icon ID 50d is used for many different weather types; this switch specifically handles that icon ID
-  if(!imgName) {
+  if(!correctImg) {
     switch (info.code) {
       case 900:
       case 781:
-        imgName = "tornado";
+        correctImg = "tornado";
         break;
 
       //case for tropical storms/hurricanes/etc
@@ -209,33 +209,33 @@ function setBackground(info) {
       case 957:
       case 905:
       case 771:
-        imgName = "hurricane";
+        correctImg = "hurricane";
         break;
 
       //case for extreme cold
       case 903:
-        imgName = "snow";
+        correctImg = "snow";
         break;
 
       //case for extreme heat
       case 904:
-        imgName = "heat";
+        correctImg = "heat";
         break;
 
       //case for hail
       case 906:
-        imgName = "hail";
+        correctImg = "hail";
         break;
 
       //case for volcanic ash
       case 762:
-        imgName = "volcanic-ash";
+        correctImg = "volcanic-ash";
         break;
 
       //case for sandstorm
       case 731:
       case 751:
-        imgName = "sandstorm";
+        correctImg = "sandstorm";
         break;
 
       //case for fog
@@ -243,7 +243,7 @@ function setBackground(info) {
       case 711:
       case 721:
       case 741:
-        imgName = "fog";
+        correctImg = "fog";
         break;
 
       //case for "breezy" weather
@@ -253,14 +253,26 @@ function setBackground(info) {
       case 954:
       case 955:
       case 956:
-        imgName = "breeze";
+        correctImg = "breeze";
         break;
     }
   }
 
+  setBackgroundImage(correctImg);
+}
+
+function setBackgroundImage(src) {
+  //if not square or landscape, then update image name to indicate we need a portrait image
+  if(!window.matchMedia("(min-aspect-ratio: 1/1)").matches) {
+    src += "-p";
+  }
+
+  src = "url(./img/" + src + ".jpg) no-repeat center fixed";
+  console.log(src);
+
   //update the background image
   $("html").css({
-    "background": "url(./img/" + imgName + ".jpg) no-repeat center fixed",
+    "background": src,
     "-webkit-background-size": "cover",
     "-moz-background-size": "cover",
     "-o-background-size": "cover",
