@@ -1,4 +1,5 @@
 $(document).ready(function() {
+  $(".content").hide();
   updateTime();
   updateDate();
   updateData();
@@ -31,11 +32,14 @@ function updateDate() {
 
 function updateLocationWeather(callback) {
   navigator.geolocation.getCurrentPosition(function(pos) {
+
+    //collect geographic coordinates
     var coords = {
       lat: pos.coords.latitude,
       lon: pos.coords.longitude
     };
 
+    //run another function on these coordinates so that we can use this information
     callback(coords);
   });
 }
@@ -99,6 +103,7 @@ function updateWeather(lat, lon) {
       temp = 0;
     }
 
+    //collect pertinent information about the weather that can be used to update the display
     var weatherInfo = {
       icon: json.weather[0].icon,
       code: json.weather[0].id,
@@ -111,15 +116,23 @@ function updateWeather(lat, lon) {
     $("#temp").html(temp + String.fromCharCode(176) + " F");
     $("#conditions").html(titleCase(weatherInfo.description));
 
+    //set the background according to the given weather information
     setBackground(weatherInfo);
   });
 }
 
+//function that calls various other functions in order to update information on weather and location
 function updateData() {
   updateLocationWeather(function(coords) {
     console.log(coords);
     geocode(coords.lat, coords.lon);
     updateWeather(coords.lat, coords.lon);
+
+    //once all calls completed, update the page
+    setTimeout(function() {
+      $(".loading").hide();
+      $(".content").show();
+    }, 100);
   });
 }
 
@@ -255,6 +268,7 @@ function setBackground(info) {
   });
 }
 
+//convert a string to simplified title case (first letter of every word capitalized)
 function titleCase(str) {
   return str.split(' ').map(function(val) {
     return val.charAt(0).toUpperCase() + val.substr(1).toLowerCase();
