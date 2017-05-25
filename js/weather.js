@@ -258,6 +258,7 @@ function determineShownImage(info) {
     }
   }
 
+  console.log(correctImg);
   setBackgroundImage(correctImg);
 }
 
@@ -268,7 +269,7 @@ function setBackgroundImage(src) {
   }
 
   src = "url(./img/" + src + ".jpg) no-repeat center fixed";
-  console.log(src);
+  //console.log(src);
 
   //update the background image
   $("html").css({
@@ -278,6 +279,8 @@ function setBackgroundImage(src) {
     "-o-background-size": "cover",
     "background-size": "cover"
   });
+
+  console.log($("html").css("background"));
 }
 
 //convert a string to simplified title case (first letter of every word capitalized)
