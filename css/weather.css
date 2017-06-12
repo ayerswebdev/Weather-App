@@ -7,6 +7,13 @@ html {
   background-size: cover;
 }
 
+header {
+  display: flex;
+  flex-flow: column wrap;
+  justify-content: center;
+  align-items: flex-end;
+}
+
 body {
   background-color: transparent;
   font-family: 'Baloo', cursive;
@@ -25,7 +32,7 @@ button {
   margin: 0 1em;
 }
 
-button:focus, button:active {
+button:focus, button:active, input:focus, input:active {
   box-shadow: none !important;
   outline: 0 !important;
 }
@@ -34,6 +41,18 @@ input {
   border-radius: 5px;
   color: black;
   width: 6em;
+}
+
+.inline {
+  display: inline;
+}
+
+.error {
+  color: red;
+}
+
+.small-margin {
+  margin: 0 3px;
 }
 
 .horizontal-flex {
@@ -69,19 +88,42 @@ input {
 
 .weather-box {
   width: 30%;
+  border-radius: 50%;
   min-height: 10em;
   position: fixed;
   top: 50%;
   left: 35%;
 }
 
-#header {
+.search {
+  background: rgba(255, 255, 255, 1.0);
+  color: black;
+  width: 29em;
+  min-height: 3em;
+  border-radius: 5px;
+}
+
+.centered {
+  margin-top: 4px;
+}
+
+.end {
   justify-content: flex-end;
 }
 
 #loading-img {
   margin: auto;
   width: 30%;
+}
+
+#search-open {
+  position: relative;
+  top: -0.625em;
+}
+
+#search-text {
+  flex-grow: 1;
+  font-size: 1.25em;
 }
 
 @media all and (min-width: 50em) {

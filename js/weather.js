@@ -1,11 +1,38 @@
 $(document).ready(function() {
   $(".content").hide();
+  $(".search").hide();
+  $("#error-msg").hide();
   updateTime();
   updateDate();
   updateData();
   var intervalTime = setInterval(updateTime, 1000); //update time every second
   var intervalDate = setInterval(updateDate, 60000); //update date every minute
-  var intervalData = setInterval(updateData, 900000); //update location/weather every fifteen minutes
+
+  $("#search-open").click(function() {
+    if($("#icon").hasClass("fa-search")) {
+      $("#icon").removeClass("fa-search");
+      $("#icon").addClass("fa-times");
+    }
+    else {
+      $("#icon").removeClass("fa-times");
+      $("#icon").addClass("fa-search");
+    }
+    $(".search").fadeToggle();
+  });
+
+  $("#search-btn").click(function() {
+    searchLocation($("#search-text").val());
+  });
+
+  $("#search-text").keypress(function(e) {
+    if(e.which == 13) {
+      $("#search-btn").trigger("click");
+    }
+  });
+
+  $("#loc-btn").click(function() {
+    updateData();
+  });
 });
 
 //use Date object to get the current time and display it on screen
@@ -44,7 +71,31 @@ function updateLocationWeather(callback) {
   });
 }
 
-function geocode(lat, lon) {
+function searchLocation(query) {
+  var key = "&key=AIzaSyBW_8v2s7F0GWY3N80w-MOki-0VJNWN9e4";
+  var formattedQuery = query.split(' ').join('+');
+
+  $.getJSON("https://maps.googleapis.com/maps/api/geocode/json?address=" + formattedQuery + key, function(json) {
+
+    if(!json.results[0].hasOwnProperty("partial_match")) {
+      var lat = json.results[0].geometry.location.lat;
+      var lon = json.results[0].geometry.location.lng;
+      console.log(json);
+
+      $("#loc").html(json.results[0].formatted_address);
+      updateWeather(lat, lon);
+    }
+
+    else {
+      $("#error-msg").slideToggle("medium");
+      setTimeout(function() {
+        $("#error-msg").slideToggle("medium");
+      }, 2000);
+    }
+  });
+}
+
+function reverseGeocode(lat, lon) {
   //use Google Maps Geolocation API to convert latitude and longitude to a city and state, then display on screen
   $.getJSON("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + lat + "," + lon + "&key=AIzaSyD2tL_cbRms_PUZl1qXPZjAucNmyCNKWa4", function(json) {
     console.log(json);
@@ -125,7 +176,7 @@ function updateWeather(lat, lon) {
 function updateData() {
   updateLocationWeather(function(coords) {
     console.log(coords);
-    geocode(coords.lat, coords.lon);
+    reverseGeocode(coords.lat, coords.lon);
     updateWeather(coords.lat, coords.lon);
 
     //once all calls completed, update the page
@@ -258,7 +309,6 @@ function determineShownImage(info) {
     }
   }
 
-  console.log(correctImg);
   setBackgroundImage(correctImg);
 }
 
@@ -279,8 +329,6 @@ function setBackgroundImage(src) {
     "-o-background-size": "cover",
     "background-size": "cover"
   });
-
-  console.log($("html").css("background"));
 }
 
 //convert a string to simplified title case (first letter of every word capitalized)

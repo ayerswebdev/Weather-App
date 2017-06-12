@@ -16,7 +16,7 @@
     <link href="https://fonts.googleapis.com/css?family=Baloo" rel="stylesheet">
     <script src="js/weather.js"></script>
 
-	  <title>Git Local Weather</title>
+	  <title>yourWeather</title>
   </head>
 
   <body>
@@ -26,16 +26,24 @@
     </div>
 
     <div class = "content">
-      <div class = "horizontal-flex" id = "header">
+      <header>
         <div class = "low-opac">
-          <div class = "horizontal-flex">
-            <h2 id="loc"></h2>
-            <button class = "btn" id = "search-btn"><span class = "fa fa-search"></span></button>
+          <div class="text-right">
+            <h2 class = "inline" id="loc"></h2>
+            <button class = "btn inline" id="search-open"><span id="icon" class="fa fa-search"></span></button>
           </div>
+          <div class = "search text-right">
+            <div class="horizontal-flex">
+              <input class="centered inline" id="search-text" type="text" placeholder="City, State, Country" />
+              <button class="btn small-margin centered inline" id="search-btn">Search</button>
+              <button class="btn small-margin centered inline" id="loc-btn"><span class="fa fa-map-marker"></span></button>
+            </div>
+          </div>
+
           <h2 class = "right-padded" id = "time"></h2>
           <h2 class = "right-padded" id = "date"></h2>
         </div>
-      </div>
+      </header>
 
       <div class = "vertical-flex" id = "body">
         <div class = "weather-box">
